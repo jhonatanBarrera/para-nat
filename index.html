@@ -20,6 +20,7 @@
             align-items: center;
             overflow: hidden;
             position: relative;
+            padding: 20px;
         }
 
         /* Corazones flotantes */
@@ -37,51 +38,68 @@
 
         .container {
             background: rgba(255, 255, 255, 0.95);
-            padding: 60px 50px;
+            padding: 40px 30px;
             border-radius: 30px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             text-align: center;
             max-width: 500px;
-            width: 90%;
+            width: 100%;
             position: relative;
             z-index: 10;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         h1 {
             color: #764ba2;
-            font-size: 2.5em;
-            margin-bottom: 40px;
+            font-size: 2em;
+            margin-bottom: 30px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .greeting-text {
+            color: #764ba2;
+            font-size: 1.3em;
+            line-height: 1.6;
+            margin-bottom: 30px;
         }
 
         .button-container {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             justify-content: center;
             margin-top: 30px;
             position: relative;
             min-height: 60px;
+            flex-wrap: wrap;
         }
 
         button {
-            padding: 15px 40px;
-            font-size: 1.3em;
+            padding: 15px 35px;
+            font-size: 1.2em;
             border: none;
             border-radius: 50px;
             cursor: pointer;
             font-weight: bold;
             transition: all 0.3s ease;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            touch-action: manipulation;
         }
 
-        .btn-yes {
+        .btn-yes, .btn-next {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             color: white;
         }
 
-        .btn-yes:hover {
+        .btn-yes:hover, .btn-next:hover {
             transform: scale(1.1);
             box-shadow: 0 8px 25px rgba(245, 87, 108, 0.4);
+        }
+
+        .btn-yes:active, .btn-next:active {
+            transform: scale(1.05);
         }
 
         .btn-no {
@@ -102,7 +120,7 @@
 
         .final-message h2 {
             color: #f5576c;
-            font-size: 2em;
+            font-size: 1.8em;
             margin-bottom: 20px;
         }
 
@@ -127,6 +145,32 @@
             0% { transform: translate(0, 0) scale(1); opacity: 1; }
             100% { transform: translate(var(--x), var(--y)) scale(0); opacity: 0; }
         }
+
+        /* Ajustes para móvil */
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+                min-height: 350px;
+            }
+
+            h1 {
+                font-size: 1.6em;
+                margin-bottom: 20px;
+            }
+
+            .greeting-text {
+                font-size: 1.1em;
+            }
+
+            button {
+                padding: 12px 28px;
+                font-size: 1.1em;
+            }
+
+            .heart {
+                font-size: 20px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -144,35 +188,48 @@
     <div class="heart" style="left: 40%; top: 80%; animation-delay: 2.5s;">💖</div>
 
     <div class="container">
-        <div id="question1" class="question-screen">
-            <h1>¿Me quieres? 💕</h1>
+        <!-- Pantalla de saludo -->
+        <div id="greeting" class="question-screen">
+            <h1>💕</h1>
+            <p class="greeting-text">Hola mi flacaaaaaa</p>
+            <div class="button-container">
+                <button class="btn-next" onclick="startQuestions()">Siguiente</button>
+            </div>
+        </div>
+
+        <!-- Pregunta 1 -->
+        <div id="question1" class="question-screen" style="display: none;">
+            <h1>Usted me quiere? 💕</h1>
             <div class="button-container">
                 <button class="btn-yes" onclick="nextQuestion()">Sí</button>
-                <button class="btn-no" id="btnNo1" onmouseover="moveButton(this)" onclick="moveButton(this)">No</button>
+                <button class="btn-no" id="btnNo1" ontouchstart="moveButton(this)" onmouseover="moveButton(this)" onclick="moveButton(this)">No</button>
             </div>
         </div>
 
+        <!-- Pregunta 2 -->
         <div id="question2" class="question-screen" style="display: none;">
-            <h1>¿Mucho o poquito? 💗</h1>
+            <h1>Mucho o poquito? 💗</h1>
             <div class="button-container">
                 <button class="btn-yes" onclick="nextQuestion2()">Mucho</button>
-                <button class="btn-no" id="btnNo2" onmouseover="moveButton(this)" onclick="moveButton(this)">Poquito</button>
+                <button class="btn-no" id="btnNo2" ontouchstart="moveButton(this)" onmouseover="moveButton(this)" onclick="moveButton(this)">Poquito</button>
             </div>
         </div>
 
+        <!-- Pregunta 3 -->
         <div id="question3" class="question-screen" style="display: none;">
-            <h1>¿Mucho de bastante o mucho de poquito? 💝</h1>
+            <h1>Mucho de bastante o mucho de poquito? 💝</h1>
             <div class="button-container">
                 <button class="btn-yes" onclick="showFinal()">Mucho de bastante</button>
-                <button class="btn-no" id="btnNo3" onmouseover="moveButton(this)" onclick="moveButton(this)">Mucho de poquito</button>
+                <button class="btn-no" id="btnNo3" ontouchstart="moveButton(this)" onmouseover="moveButton(this)" onclick="moveButton(this)">Mucho de poquito</button>
             </div>
         </div>
 
+        <!-- Mensaje final -->
         <div id="finalMessage" class="final-message">
-            <h2>¡Lo sabía! 💖</h2>
-            <p>Sabía que me querías mucho de bastante 😊</p>
-            <p style="margin-top: 20px;">¡Yo también te quiero muchísimo! 💕✨</p>
-            <div style="font-size: 3em; margin-top: 20px;">💑💖💕</div>
+            <h2>Yo lo sabia, ojala le caiga un rayo por cada vez que trato de darle a que no me queria :)</h2>
+            <p>pero yo sabía que me quería mucho de bastante ja</p>
+            <p style="margin-top: 20px;">Yo tambien la quiero mucho mi niña</p>
+            <div style="font-size: 3em; margin-top: 20px;">💖💕</div>
         </div>
     </div>
 
@@ -209,17 +266,23 @@
             }
         }
 
+        function startQuestions() {
+            createHeartsExplosion();
+            document.getElementById('greeting').style.display = 'none';
+            document.getElementById('question1').style.display = 'block';
+        }
+
         function moveButton(btn) {
             btn.classList.add('moving');
             
             const container = document.querySelector('.container');
             const containerRect = container.getBoundingClientRect();
             
-            const maxX = containerRect.width - btn.offsetWidth - 40;
-            const maxY = containerRect.height - btn.offsetHeight - 40;
+            const maxX = containerRect.width - btn.offsetWidth - 60;
+            const maxY = containerRect.height - btn.offsetHeight - 60;
             
-            const randomX = Math.random() * maxX;
-            const randomY = Math.random() * maxY;
+            const randomX = Math.random() * maxX + 30;
+            const randomY = Math.random() * maxY + 30;
             
             btn.style.left = randomX + 'px';
             btn.style.top = randomY + 'px';
@@ -229,19 +292,22 @@
             createHeartsExplosion();
             document.getElementById('question1').style.display = 'none';
             document.getElementById('question2').style.display = 'block';
+            // Resetear posición del botón No
+            const btnNo2 = document.getElementById('btnNo2');
+            btnNo2.classList.remove('moving');
+            btnNo2.style.left = '';
+            btnNo2.style.top = '';
         }
 
         function nextQuestion2() {
             createHeartsExplosion();
             document.getElementById('question2').style.display = 'none';
             document.getElementById('question3').style.display = 'block';
-        }
-
-        function showFinal() {
-            createHeartsExplosion();
-            document.getElementById('question3').style.display = 'none';
-            document.getElementById('finalMessage').style.display = 'block';
-        
+            // Resetear posición del botón No
+            const btnNo3 = document.getElementById('btnNo3');
+            btnNo3.classList.remove('moving');
+            btnNo3.style.left = '';
+            btnNo3.style.top = '';
         }
 
         function showFinal() {
