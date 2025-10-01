@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Me quieres? 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Corazones flotantes */
+        .heart {
+            position: absolute;
+            font-size: 30px;
+            animation: float 6s infinite ease-in-out;
+            opacity: 0.6;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 60px 50px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 {
+            color: #764ba2;
+            font-size: 2.5em;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .button-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+            position: relative;
+            min-height: 60px;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 1.3em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .btn-yes:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(245, 87, 108, 0.4);
+        }
+
+        .btn-no {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #764ba2;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-no.moving {
+            position: absolute;
+        }
+
+        .final-message {
+            display: none;
+            animation: fadeIn 1s ease-in;
+        }
+
+        .final-message h2 {
+            color: #f5576c;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .final-message p {
+            color: #764ba2;
+            font-size: 1.2em;
+            line-height: 1.6;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .hearts-explosion {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        @keyframes explode {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--x), var(--y)) scale(0); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Audio de fondo -->
+    <audio id="backgroundMusic" loop>
+        <source src="reina-pepiada.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Corazones flotantes de fondo -->
+    <div class="heart" style="left: 10%; top: 20%; animation-delay: 0s;">💖</div>
+    <div class="heart" style="left: 80%; top: 30%; animation-delay: 1s;">💕</div>
+    <div class="heart" style="left: 15%; top: 70%; animation-delay: 2s;">💗</div>
+    <div class="heart" style="left: 85%; top: 60%; animation-delay: 3s;">💝</div>
+    <div class="heart" style="left: 50%; top: 10%; animation-delay: 1.5s;">💓</div>
+    <div class="heart" style="left: 40%; top: 80%; animation-delay: 2.5s;">💖</div>
+
+    <div class="container">
+        <div id="question1" class="question-screen">
+            <h1>¿Me quieres? 💕</h1>
+            <div class="button-container">
+                <button class="btn-yes" onclick="nextQuestion()">Sí</button>
+                <button class="btn-no" id="btnNo1" onmouseover="moveButton(this)" onclick="moveButton(this)">No</button>
+            </div>
+        </div>
+
+        <div id="question2" class="question-screen" style="display: none;">
+            <h1>¿Mucho o poquito? 💗</h1>
+            <div class="button-container">
+                <button class="btn-yes" onclick="nextQuestion2()">Mucho</button>
+                <button class="btn-no" id="btnNo2" onmouseover="moveButton(this)" onclick="moveButton(this)">Poquito</button>
+            </div>
+        </div>
+
+        <div id="question3" class="question-screen" style="display: none;">
+            <h1>¿Mucho de bastante o mucho de poquito? 💝</h1>
+            <div class="button-container">
+                <button class="btn-yes" onclick="showFinal()">Mucho de bastante</button>
+                <button class="btn-no" id="btnNo3" onmouseover="moveButton(this)" onclick="moveButton(this)">Mucho de poquito</button>
+            </div>
+        </div>
+
+        <div id="finalMessage" class="final-message">
+            <h2>¡Lo sabía! 💖</h2>
+            <p>Sabía que me querías mucho de bastante 😊</p>
+            <p style="margin-top: 20px;">¡Yo también te quiero muchísimo! 💕✨</p>
+            <div style="font-size: 3em; margin-top: 20px;">💑💖💕</div>
+        </div>
+    </div>
+
+    <script>
+        // Iniciar música automáticamente al cargar la página
+        let musicStarted = false;
+        const audio = document.getElementById('backgroundMusic');
+        
+        // Intentar reproducir música inmediatamente
+        window.addEventListener('load', () => {
+            audio.volume = 0.5;
+            audio.play()
+                .then(() => {
+                    musicStarted = true;
+                    console.log('Música iniciada correctamente');
+                })
+                .catch(e => {
+                    console.log('Esperando interacción del usuario...');
+                    // Si falla, esperar la primera interacción
+                    document.body.addEventListener('click', startMusicOnClick, { once: true });
+                    document.body.addEventListener('touchstart', startMusicOnClick, { once: true });
+                    document.body.addEventListener('mousemove', startMusicOnClick, { once: true });
+                });
+        });
+        
+        function startMusicOnClick() {
+            if (!musicStarted) {
+                audio.play()
+                    .then(() => {
+                        musicStarted = true;
+                        console.log('Música iniciada con interacción');
+                    })
+                    .catch(e => console.log('Error:', e));
+            }
+        }
+
+        function moveButton(btn) {
+            btn.classList.add('moving');
+            
+            const container = document.querySelector('.container');
+            const containerRect = container.getBoundingClientRect();
+            
+            const maxX = containerRect.width - btn.offsetWidth - 40;
+            const maxY = containerRect.height - btn.offsetHeight - 40;
+            
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+            
+            btn.style.left = randomX + 'px';
+            btn.style.top = randomY + 'px';
+        }
+
+        function nextQuestion() {
+            createHeartsExplosion();
+            document.getElementById('question1').style.display = 'none';
+            document.getElementById('question2').style.display = 'block';
+        }
+
+        function nextQuestion2() {
+            createHeartsExplosion();
+            document.getElementById('question2').style.display = 'none';
+            document.getElementById('question3').style.display = 'block';
+        }
+
+        function showFinal() {
+            createHeartsExplosion();
+            document.getElementById('question3').style.display = 'none';
+            document.getElementById('finalMessage').style.display = 'block';
+        
+        }
+
+        function showFinal() {
+            createHeartsExplosion();
+            document.getElementById('question3').style.display = 'none';
+            document.getElementById('finalMessage').style.display = 'block';
+        }
+
+        function createHeartsExplosion() {
+            const hearts = ['💖', '💕', '💗', '💝', '💓', '💘'];
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'hearts-explosion';
+                heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = '50%';
+                heart.style.top = '50%';
+                heart.style.fontSize = '30px';
+                heart.style.position = 'fixed';
+                
+                const angle = (Math.PI * 2 * i) / 15;
+                const distance = 200;
+                const x = Math.cos(angle) * distance;
+                const y = Math.sin(angle) * distance;
+                
+                heart.style.setProperty('--x', x + 'px');
+                heart.style.setProperty('--y', y + 'px');
+                heart.style.animation = 'explode 1s ease-out forwards';
+                
+                document.body.appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 1000);
+            }
+        }
+    </script>
+</body>
+</html>
